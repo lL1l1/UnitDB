@@ -67,9 +67,9 @@
         //    some weapons also have separate charge and reload times which results in them firing less often. yeah.
         //    in theory if your total MuzzleSalvoDelay is longer than the reload time your weapon waits for the reload time twice,
         //    but thats pretty much a bug so not taken into account here
-        
-        ///  BTW - SpookyDB uses round(), not floor(), based on the values seen there.  Values will not match between DBs.  floor() is the correct method.
-        $trueReload = max(0.1*floor(10 / $weapon["RateOfFire"]), 0.1); 
+
+	//    Supcom engine rounds half fire rates towards evens
+        $trueReload = max(0.1*round(10 / ($weapon["RateOfFire"] ?? 1), 1, PHP_ROUND_HALF_EVEN), 0.1); 
         $trueReload = max(
                 ($weapon["RackSalvoChargeTime"] ?? 0) + ($weapon["RackSalvoReloadTime"] ?? 0) + 
                     ($weapon["MuzzleSalvoDelay"] ?? 0)*(($weapon["MuzzleSalvoSize"] ?? 1)-1), 
